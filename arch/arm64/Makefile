@@ -79,11 +79,11 @@ KBUILD_AFLAGS	+= $(lseinstr) $(vdso32)
 
 ifeq ($(CONFIG_CPU_BIG_ENDIAN), y)
 KBUILD_CPPFLAGS	+= -mbig-endian
-AS		+= -EB
+KBUILD_AFLAGS		+= -EB
 LDFLAGS		+= -EB $(call ld-option, -maarch64_elf64_be_vec, -maarch64linuxb)
 else
 KBUILD_CPPFLAGS	+= -mlittle-endian
-AS		+= -EL
+KBUILD_AFLAGS		+= -EL
 LDFLAGS		+= -EL $(call ld-option, -maarch64_elf64_le_vec, -maarch64linux)
 endif
 
