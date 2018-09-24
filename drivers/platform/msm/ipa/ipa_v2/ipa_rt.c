@@ -1368,7 +1368,6 @@ int ipa2_reset_rt(enum ipa_ip_type ip)
 			 */
 			if (tbl->idx == apps_start_idx && tbl->rule_cnt == 1)
 				continue;
-
 			list_del(&rule->link);
 			if (rule->hdr) {
 				hdr_entry = ipa_id_find(rule->rule.hdr_hdl);
