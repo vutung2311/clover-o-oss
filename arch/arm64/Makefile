@@ -11,6 +11,7 @@
 # Copyright (C) 1995-2001 by Russell King
 
 LDFLAGS_vmlinux	:=--no-undefined -X
+LDFLAGS :=
 CPPFLAGS_vmlinux.lds = -DTEXT_OFFSET=$(TEXT_OFFSET)
 OBJCOPYFLAGS	:=-O binary -R .note -R .note.gnu.build-id -R .comment -S
 GZFLAGS		:=-9
@@ -50,11 +51,11 @@ KBUILD_AFLAGS	+= $(lseinstr)
 ifeq ($(CONFIG_CPU_BIG_ENDIAN), y)
 KBUILD_CPPFLAGS	+= -mbig-endian
 AS		+= -EB
-LD		+= -EB
+LDFLAGS		+= -EB $(call ld-option, -maarch64_elf64_be_vec, -maarch64elfb)
 else
 KBUILD_CPPFLAGS	+= -mlittle-endian
 AS		+= -EL
-LD		+= -EL
+LDFLAGS		+= -EL $(call ld-option, -maarch64_elf64_le_vec, -maarch64elf)
 endif
 
 CHECKFLAGS	+= -D__aarch64__
