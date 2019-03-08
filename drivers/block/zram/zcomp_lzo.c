@@ -49,6 +49,13 @@ static int lzo_compress(const unsigned char *src, unsigned char *dst,
 	return ret == LZO_E_OK ? 0 : ret;
 }
 
+static int lzorle_compress(const unsigned char *src, unsigned char *dst,
+		size_t *dst_len, void *private)
+{
+	int ret = lzorle1x_1_compress(src, PAGE_SIZE, dst, dst_len, private);
+	return ret == LZO_E_OK ? 0 : ret;
+}
+
 static int lzo_decompress(const unsigned char *src, size_t src_len,
 		unsigned char *dst)
 {
@@ -63,4 +70,12 @@ struct zcomp_backend zcomp_lzo = {
 	.create = lzo_create,
 	.destroy = lzo_destroy,
 	.name = "lzo",
+};
+
+struct zcomp_backend zcomp_lzorle = {
+	.compress = lzorle_compress,
+	.decompress = lzo_decompress,
+	.create = lzo_create,
+	.destroy = lzo_destroy,
+	.name = "lzo-rle",
 };

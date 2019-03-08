@@ -13,5 +13,6 @@
 #include "zcomp.h"
 
 extern struct zcomp_backend zcomp_lzo;
+extern struct zcomp_backend zcomp_lzorle;
 
 #endif /* _ZCOMP_LZO_H_ */
