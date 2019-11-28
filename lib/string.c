@@ -725,7 +725,13 @@ void *memmove(void *dest, const void *src, size_t count)
 EXPORT_SYMBOL(memmove);
 #endif
 
-#ifndef __HAVE_ARCH_MEMCMP
+#ifdef __HAVE_ARCH_MEMCMP
+int bcmp(const void *cs, const void *ct, size_t n)
+{
+       return memcmp(cs, ct, n);
+}
+EXPORT_SYMBOL(bcmp);
+#else
 /**
  * memcmp - Compare two areas of memory
  * @cs: One area of memory
@@ -744,6 +750,8 @@ __visible int memcmp(const void *cs, const void *ct, size_t count)
 	return res;
 }
 EXPORT_SYMBOL(memcmp);
+__weak __alias(memcmp) typeof(memcmp) bcmp;
+EXPORT_SYMBOL(bcmp);
 #endif
 
 #ifndef __HAVE_ARCH_MEMSCAN
