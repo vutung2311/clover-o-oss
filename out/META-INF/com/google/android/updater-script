@@ -5,16 +5,12 @@ set_progress(0.500000);
 ifelse(is_mounted("/system"), "", (
 run_program("/sbin/busybox", "mount", "/system");
 ));
-ui_print("Extracting kernel modules");
-package_extract_dir("system", "/system");
-set_perm(0, 0, 0644, "/system/lib/modules/br_netfilter.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/gspca_main.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/mpq-adapter.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/mpq-dmx-hw-plugin.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/msm_11ad_proxy.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/rdbg.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/test-iosched.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/ufs_test.ko");
-set_perm(0, 0, 0644, "/system/lib/modules/wil6210.ko");
-set_progress(1.000000);
+ifelse(is_mounted("/vendor"), "", (
+run_program("/sbin/busybox", "mount", "/vendor");
+));
+ui_print("Clean old kernel modules");
+delete_recursive("/system/lib/modules");
+delete_recursive("/vendor/lib/modules/");
 run_program("/sbin/busybox", "umount", "/system");
+run_program("/sbin/busybox", "umount", "/vendor");
+set_progress(1.000000);
