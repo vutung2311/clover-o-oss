@@ -200,7 +200,7 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
 	/* The underlying hash algorithm must be unkeyed */
 	err = -EINVAL;
 	if (crypto_shash_alg_has_setkey(salg))
-	    goto out_put_alg;
+		goto out_put_alg;
 
 	ds = salg->digestsize;
 	ss = salg->statesize;

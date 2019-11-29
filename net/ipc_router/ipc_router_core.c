@@ -225,7 +225,6 @@ void msm_ipc_router_set_ws_allowed(bool flag)
 	is_wakeup_source_allowed = flag;
 }
 
-
 /**
  * is_sensor_port() - Check if the remote port is sensor service or not
  * @rport: Pointer to the remote port.
@@ -238,13 +237,12 @@ static int is_sensor_port(struct msm_ipc_router_remote_port *rport)
 
 	if (rport && rport->server) {
 		svcid = rport->server->name.service;
-		if (svcid == 256)
+		if (svcid == 400 || (svcid >= 256 && svcid <= 320))
 			return true;
 	}
 
 	return false;
 }
-
 
 static void init_routing_table(void)
 {
@@ -299,7 +297,7 @@ static uint32_t ipc_router_calc_checksum(union rr_control_msg *msg)
  */
 static void skb_copy_to_log_buf(struct sk_buff_head *skb_head,
 				unsigned int pl_len, unsigned int hdr_offset,
-				uint64_t *log_buf)
+				unsigned char *log_buf)
 {
 	struct sk_buff *temp_skb;
 	unsigned int copied_len = 0, copy_len = 0;
@@ -379,7 +377,8 @@ static void ipc_router_log_msg(void *log_ctx, uint32_t xchng_type,
 			else if (hdr->version == IPC_ROUTER_V2)
 				hdr_offset = sizeof(struct rr_header_v2);
 		}
-		skb_copy_to_log_buf(skb_head, buf_len, hdr_offset, &pl_buf);
+		skb_copy_to_log_buf(skb_head, buf_len, hdr_offset,
+				    (unsigned char *)&pl_buf);
 
 		if (port_ptr && rport_ptr && (port_ptr->type == CLIENT_PORT)
 				&& (rport_ptr->server != NULL)) {
@@ -4259,7 +4258,6 @@ void msm_ipc_router_xprt_notify(struct msm_ipc_router_xprt *xprt,
 	if (!pkt)
 		return;
 
-
 	if (pkt->length < calc_rx_header_size(xprt_info) ||
 	    pkt->length > MAX_IPC_PKT_SIZE) {
 		IPC_RTR_ERR("%s: Invalid pkt length %d\n",
@@ -4274,28 +4272,26 @@ void msm_ipc_router_xprt_notify(struct msm_ipc_router_xprt *xprt,
 		return;
 	}
 
-
 	pkt->ws_need = false;
-
 
 	if (pkt->hdr.type == IPC_ROUTER_CTRL_CMD_DATA)
 		rport_ptr = ipc_router_get_rport_ref(pkt->hdr.src_node_id,
 						     pkt->hdr.src_port_id);
 
-
 	mutex_lock(&xprt_info->rx_lock_lhb2);
 	list_add_tail(&pkt->list, &xprt_info->pkt_list);
-
-	/* check every pkt is from SENSOR services or not*/
-	if (is_sensor_port(rport_ptr)) {
-		pkt->ws_need = false;
-	} else if (!xprt_info->dynamic_ws) {
-		__pm_stay_awake(&xprt_info->ws);
-		pkt->ws_need = true;
-	} else {
-		if (is_wakeup_source_allowed) {
+	/* check every pkt is from SENSOR services or not and
+	 * avoid holding both edge and port specific wake-up sources
+	 */
+	if (!is_sensor_port(rport_ptr)) {
+		if (!xprt_info->dynamic_ws) {
 			__pm_stay_awake(&xprt_info->ws);
 			pkt->ws_need = true;
+		} else {
+			if (is_wakeup_source_allowed) {
+				__pm_stay_awake(&xprt_info->ws);
+				pkt->ws_need = true;
+			}
 		}
 	}
 
