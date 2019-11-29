@@ -6,7 +6,7 @@ export KBUILD_BUILD_USER=BuildUser
 export KBUILD_BUILD_HOST=BuildHost
 
 GCC_BIN_PATH=$HOME/Toolchain/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin
-CLANG_BIN_PATH=$HOME/Toolchain/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/bin
+CLANG_BIN_PATH=$HOME/Toolchain/snapdragon-llvm-6.0.2-linux64/toolchains/llvm-Snapdragon_LLVM_for_Android_6.0/prebuilt/linux-x86_64/bin
 
 BUILD_CROSS_COMPILE=$GCC_BIN_PATH/aarch64-linux-gnu-
 BUILD_CC=$CLANG_BIN_PATH/clang
