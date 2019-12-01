@@ -1287,7 +1287,7 @@ static int fb_notifier_callback(struct notifier_block *self,
 
 	FTS_DEBUG("Enter %s", __func__);
 
-	if (evdata && evdata->data && event == FB_EVENT_BLANK &&
+	if (evdata && evdata->data && event == FB_EARLY_EVENT_BLANK &&
 		fts_data && fts_data->client) {
 		blank = evdata->data;
 		if (*blank == FB_BLANK_UNBLANK)
