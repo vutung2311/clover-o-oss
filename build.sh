@@ -6,15 +6,13 @@ export KBUILD_BUILD_USER=BuildUser
 export KBUILD_BUILD_HOST=BuildHost
 
 GCC_BIN_PATH=$HOME/Toolchain/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin
-CLANG_BIN_PATH=$HOME/Toolchain/snapdragon-llvm-6.0.2-linux64/toolchains/llvm-Snapdragon_LLVM_for_Android_6.0/prebuilt/linux-x86_64/bin
+CLANG_BIN_PATH=$HOME/Toolchain/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/bin
 
 BUILD_CROSS_COMPILE=$GCC_BIN_PATH/aarch64-linux-gnu-
 BUILD_CC=$CLANG_BIN_PATH/clang
 # BUILD_CC="${BUILD_CROSS_COMPILE}gcc"
-# BUILD_LD=$CLANG_BIN_PATH/ld.lld
-BUILD_LD="${BUILD_CROSS_COMPILE}ld"
-BUILD_LDLTO=$CLANG_BIN_PATH/ld.lld
-# BUILD_LDLTO="${BUILD_CROSS_COMPILE}ld.gold"
+BUILD_LD=$CLANG_BIN_PATH/ld.lld
+# BUILD_LD="${BUILD_CROSS_COMPILE}ld"
 BUILD_JOB_NUMBER="$(nproc)"
 # BUILD_JOB_NUMBER=1
 
@@ -47,7 +45,6 @@ FUNC_BUILD_KERNEL()
 	make -j$BUILD_JOB_NUMBER ARCH=${ARCH} \
 			CC=$BUILD_CC \
 			LD=$BUILD_LD \
-			LDLTO=$BUILD_LDLTO \
 			CROSS_COMPILE="$BUILD_CROSS_COMPILE" \
 			$KERNEL_DEFCONFIG || exit -1
 
@@ -55,16 +52,16 @@ FUNC_BUILD_KERNEL()
 	for var in "$@"
 	do
 		if [[ "$var" = "--with-lto" ]] ; then
-			echo "Enable LTO_CLANG"
+			echo "Enable CLANG_LTO"
 			./scripts/config \
-			-e LTO_CLANG
-			break
+			-e CLANG_LTO
+			continue
 		fi
 		if [[ "$var" = "--with-supersu" ]] ; then
 			echo "Enable ASSISTED_SUPERUSER"
 			./scripts/config \
 			-e ASSISTED_SUPERUSER
-			break
+			continue
 		fi
 	done
 	echo ""
@@ -72,7 +69,6 @@ FUNC_BUILD_KERNEL()
 	make -j$BUILD_JOB_NUMBER ARCH=${ARCH} \
 			CC=$BUILD_CC \
 			LD=$BUILD_LD \
-			LDLTO=$BUILD_LDLTO \
 			CROSS_COMPILE="$BUILD_CROSS_COMPILE" || exit -1
 
 	echo ""
