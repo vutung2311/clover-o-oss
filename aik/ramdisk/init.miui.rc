@@ -82,8 +82,6 @@ on post-fs-data
 
 on post-fs-data
     restorecon_recursive /sys/kernel/debug/rtmm
-    restorecon_recursive /sys/kernel/debug/ktrace
-    restorecon_recursive /sys/kernel/debug/kperfevents
     restorecon /sys/kernel/debug/extfrag/extfrag_index
 
 
@@ -187,7 +185,6 @@ service fdpp /system/bin/fdpp daemon
 service mqsasd /system/xbin/mqsasd daemon
     user root
     group system cache log
-    socket mqsasd stream 0660 system system
 
 on post-fs-data
     mkdir /data/mqsas 0775 system system
@@ -215,6 +212,12 @@ service miui-post-boot /system/bin/sh /init.miui.post_boot.sh
     disabled
     oneshot
 
+service miuibooster /system/xbin/miuibooster
+    class main
+    user root
+    socket miui_booster stream 660 system system
+    oneshot
+
 on boot
     # cpu trace
     chown root system /d/ktrace/sched/pids
@@ -225,29 +228,6 @@ on boot
     chmod 0660 /d/ktrace/sched/zygote64_pid
     chown system system /d/ktrace/events/mm/slowpath/reset
 
-    # kperfevents
-    chown system system /d/kperfevents/supervision_level
-    chmod 0660 /d/kperfevents/supervision_level
-    chown system system /d/kperfevents/lower_threshold_millis
-    chmod 0660 /d/kperfevents/lower_threshold_millis
-    chown system system /d/kperfevents/upper_threshold_millis
-    chmod 0660 /d/kperfevents/upper_threshold_millis
-    chown system system /d/kperfevents/min_overlap_millis
-    chmod 0660 /d/kperfevents/min_overlap_millis
-    chown system system /d/kperfevents/translating_kernel_address_args
-    chmod 0220 /d/kperfevents/translating_kernel_address_args
-    chown system system /d/kperfevents/translating_kernel_address_result
-    chmod 0440 /d/kperfevents/translating_kernel_address_result
-    chown system system /dev/proc_kperfevents
-    chmod 0444 /dev/proc_kperfevents
-    chown system system /dev/device_kperfevents
-    chmod 0440 /dev/device_kperfevents
-
-    # psi
-    chmod 0660 /proc/pressure/io
-    chmod 0660 /proc/pressure/memory
-    chmod 0660 /proc/pressure/cpu
-
     # rtmm
     chown system system /d/rtmm/reclaim/auto_reclaim
     chmod 0660 /d/rtmm/reclaim/auto_reclaim
@@ -257,8 +237,6 @@ on boot
     chmod 0660 /d/rtmm/reclaim/proc_reclaim
     chown system system /d/rtmm/reclaim/kill
     chmod 0660 /d/rtmm/reclaim/kill
-    chown system system /d/rtmm/compact/compact_memory
-    chmod 0660 /d/rtmm/compact/compact_memory
 
     mkdir /dev/cpuctl/fg_service
     chown system system /dev/cpuctl/fg_service/tasks
