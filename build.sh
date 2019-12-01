@@ -51,20 +51,23 @@ FUNC_BUILD_KERNEL()
 			CROSS_COMPILE="$BUILD_CROSS_COMPILE" \
 			$KERNEL_DEFCONFIG || exit -1
 
+	echo ""
 	for var in "$@"
 	do
 		if [[ "$var" = "--with-lto" ]] ; then
-			echo ""
 			echo "Enable LTO_CLANG"
-			echo ""
 			./scripts/config \
-			-e LTO_CLANG \
-			-d ARM64_ERRATUM_843419 \
-			-d MODVERSIONS
-			OUTPUT_ZIP=${OUTPUT_ZIP}".lto"
+			-e LTO_CLANG
+			break
+		fi
+		if [[ "$var" = "--with-supersu" ]] ; then
+			echo "Enable ASSISTED_SUPERUSER"
+			./scripts/config \
+			-e ASSISTED_SUPERUSER
 			break
 		fi
 	done
+	echo ""
 
 	make -j$BUILD_JOB_NUMBER ARCH=${ARCH} \
 			CC=$BUILD_CC \
