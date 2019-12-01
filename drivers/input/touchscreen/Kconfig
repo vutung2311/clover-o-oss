@@ -12,7 +12,6 @@ menuconfig INPUT_TOUCHSCREEN
 if INPUT_TOUCHSCREEN
 
 source "drivers/input/touchscreen/synaptics_dsx/Kconfig"
-source "drivers/input/touchscreen/focaltech_d9_d9p/Kconfig"
 
 config OF_TOUCHSCREEN
 	def_tristate INPUT
@@ -1249,6 +1248,10 @@ config TOUCHSCREEN_FOCALTECH_D9_D9P
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called focaltech.
+
+source "drivers/input/touchscreen/focaltech_d9_d9p/Kconfig"
+source "drivers/input/touchscreen/ft5446/Kconfig"
+source "drivers/input/touchscreen/gt9xx/Kconfig"
 
 config TOUCHSCREEN_GT9XX_ZQL6019
 	bool "Goodix touchpanel GT9XX series"
