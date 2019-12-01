@@ -22,7 +22,7 @@
 * directives.  Suppress the warning in clang as well.
 */
 #undef inline
-#define inline inline __attribute__((unused)) notrace
+#define inline inline __attribute__((always_inline)) __attribute__((unused)) notrace
 
 #ifdef CONFIG_CC_LTO
 #ifdef CONFIG_FTRACE_MCOUNT_RECORD
