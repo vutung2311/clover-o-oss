@@ -1747,7 +1747,8 @@ static int fts_fwupg_get_fw_file(struct fts_ts_data *ts_data)
 	ret = request_firmware(&firm, fw_name, dev);
 	if (ret != 0) {
 		FTS_ERROR("%s:firmware request fail, ret=%d, fw_name=%s\n", __func__, ret, fw_name);
-		return -ENODATA;
+		FTS_INFO("found no firmware storage, use built-in firmware");
+		goto use_builtin_fw;
 	}
 
 	fw = (struct upgrade_fw *)kzalloc(sizeof(*fw), GFP_KERNEL);
@@ -1773,6 +1774,7 @@ static int fts_fwupg_get_fw_file(struct fts_ts_data *ts_data)
 	FTS_INFO("0x%x,0x%x,0x%x,0x%x,0x%x,0x%x",
 		fw->fw_file[0], fw->fw_file[1], fw->fw_file[2], fw->fw_file[3], fw->fw_file[4], fw->fw_file[5]);
 
+use_builtin_fw:
 	if (upg) {
 		upg->fw = fw->fw_file;
 		upg->fw_length = fw->fw_len;
