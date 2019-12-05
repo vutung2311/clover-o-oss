@@ -36,6 +36,7 @@
 #define TIME_BUF_LEN  17
 #define DBG_EVENT_LEN  143
 
+#define USB_CTRL_UNUSED 0
 #define USB_BAM_NR_PORTS	4
 
 /* Additional memory to be allocated than required data fifo size */
@@ -2835,9 +2836,9 @@ static struct msm_usb_bam_data *usb_bam_dt_to_data(
 
 	rc = of_property_read_u32(node, "qcom,bam-type", &bam);
 	if (rc) {
-		log_event_err("%s: bam type is missing in device tree\n",
-			__func__);
-		return NULL;
+		log_event_err("%s: bam type is missing in device tree. "
+			      "Setting type as USB_CTRL_UNUSED\n", __func__);
+		bam = USB_CTRL_UNUSED;
 	}
 	if (bam >= MAX_BAMS) {
 		log_event_err("%s: Invalid bam type %d in device tree\n",
