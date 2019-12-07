@@ -323,10 +323,25 @@
 			23 00 00 00 00 00 02 84 22
 			23 00 00 00 00 00 02 90 C0
 			23 01 00 00 01 00 02 8F 00];
+		qcom,mdss-dsi-CE_on-command = [];
+		qcom,mdss-dsi-CE_off-command = [];
+		qcom,mdss-dsi-cold_gamma-command = [];
+		qcom,mdss-dsi-warm_gamma-command = [];
+		qcom,mdss-dsi-default_gamma-command = [];
+		qcom,mdss-dsi-sRGB_on-command = [];
+		qcom,mdss-dsi-sRGB_off-command = [];
+		qcom,mdss-dsi-PM1-command = [];
+		qcom,mdss-dsi-PM2-command = [];
+		qcom,mdss-dsi-PM3-command = [];
+		qcom,mdss-dsi-PM4-command = [];
+		qcom,mdss-dsi-PM5-command = [];
+		qcom,mdss-dsi-PM6-command = [];
+		qcom,mdss-dsi-PM7-command = [];
+		qcom,mdss-dsi-PM8-command = [];
 		qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
-		qcom,mdss-dsi-off-command-state = "dsi_lp_mode";
+		qcom,mdss-dsi-off-command-state = "dsi_hs_mode";
 		qcom,mdss-dsi-CABC_on-command-state = "dsi_lp_mode";
-		qcom,mdss-dsi-CABC_off-command-state = "dsi_lp_mode";
+		qcom,mdss-dsi-CABC_off-command-state = "dsi_hs_mode";
 		qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_wled";
 		qcom,mdss-dsi-reset-sequence = <1 10>;
 		qcom,mdss-dsi-lp11-init;
@@ -335,5 +350,6 @@
 		qcom,mdss-dsi-force-clock-lane-hs;
 		qcom,mdss-pan-physical-width-dimension = <107>;
 		qcom,mdss-pan-physical-height-dimension = <172>;
+		qcom,ulps-enabled;
 	};
 };
