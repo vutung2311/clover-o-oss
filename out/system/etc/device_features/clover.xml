@@ -226,7 +226,7 @@
     <float name="camera_exposure_compensation_steps_num">12.0</float>
     <!--Left margin of count down parent layout for front camera-->
     <float name="camera_front_count_down_margin">-0.5573</float>
-    <bool name="front_fingerprint_sensor">true</bool>
+    <bool name="front_fingerprint_sensor">false</bool>
     <bool name="support_parallel_process">true</bool>
     <!--whether the device supports smart cover with small window-->$
     <bool name="support_small_win_cover">false</bool>
