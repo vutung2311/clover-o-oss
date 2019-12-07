@@ -14,6 +14,8 @@ set_perm(0, 0, 0755, "/vendor/bin/init.qcom.post_boot.sh");
 ui_print("Disable front fingperprint sensor configuration");
 package_extract_dir("system", "/system");
 set_perm(0, 0, 0644, "/system/etc/device_features/clover.xml");
+ui_print("Disable useless mfidoca service");
+set_perm(0, 0, 0644, "/system/etc/init/vendor.xiaomi.hardware.mfidoca@1.0-service.rc");
 ui_print("Clean old kernel modules");
 delete_recursive("/system/lib/modules");
 delete_recursive("/vendor/lib/modules/");
