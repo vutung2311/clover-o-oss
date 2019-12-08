@@ -1,2 +1,22 @@
 service displayfeature /system/bin/displayfeature
-    class main
+    class late_start
+    user root
+    group root
+
+on property:init.svc.surfaceflinger=stopped
+    stop displayfeature
+
+on property:init.svc.surfaceflinger=running
+    start displayfeature
+
+on property:init.svc.surfaceflinger=restarting
+    stop displayfeature
+
+on property:init.svc.zygote=stopped
+    stop displayfeature
+
+on property:init.svc.zygote=running
+    start displayfeature
+
+on property:init.svc.zygote=restarting
+    stop displayfeature
