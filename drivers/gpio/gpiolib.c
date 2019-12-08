@@ -81,6 +81,8 @@ struct gpio_desc *gpio_to_desc(unsigned gpio)
 
 	spin_unlock_irqrestore(&gpio_lock, flags);
 
+	if (gpio == -EPROBE_DEFER)
+		return NULL;
 	if (!gpio_is_valid(gpio))
 		WARN(1, "invalid GPIO %d\n", gpio);
 
