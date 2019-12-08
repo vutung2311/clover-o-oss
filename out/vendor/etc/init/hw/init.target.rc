@@ -134,7 +134,8 @@ on boot
     # wendell-20180423 end
     start getpersistlog
     #Load WLAN driver
-    insmod /vendor/lib/modules/qca_cld3/qca_cld3_wlan.ko
+    # WLAN driver now is built direcly inside kernel
+    #insmod /vendor/lib/modules/qca_cld3/qca_cld3_wlan.ko
     setprop wlan.driver.status "ok"
 
 #Peripheral manager
