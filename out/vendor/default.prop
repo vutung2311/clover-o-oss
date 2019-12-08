@@ -22,6 +22,6 @@ pm.dexopt.inactive=verify
 pm.dexopt.shared=speed
 debug.atrace.tags.enableflags=0
 ro.logdumpd.enabled=0
-persist.sys.timezone=Europe/Brussels
+persist.sys.timezone=Asia/Ho_Chi_Minh
 debug.sf.disable_backpressure=1
 ro.build.selinux=0
