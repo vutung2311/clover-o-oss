@@ -54,7 +54,8 @@ on init
 
 on post-fs
     chmod 0755 /sys/kernel/debug/tracing
-    insmod /system/lib/modules/exfat.ko
+    # exfat now is sdfat which is built directly to kernel
+    # insmod /system/lib/modules/exfat.ko
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -217,7 +218,8 @@ on boot
     mkdir /persist/vpp 0770 media media
 
     # load WIGIG platform driver
-    insmod /vendor/lib/modules/msm_11ad_proxy.ko
+    # this is also built directly inside kernel
+    # insmod /vendor/lib/modules/msm_11ad_proxy.ko
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -757,7 +759,8 @@ service wigignpt /vendor/bin/wigignpt
     disabled
 
 on property:persist.vendor.wigig.enable=1
-    insmod /vendor/lib/modules/wil6210.ko alt_ifname=1
+    # this is built directly inside kernel
+    #insmod /vendor/lib/modules/wil6210.ko alt_ifname=1
     start wigighalsvc
 
 on property:persist.vendor.wigig.npt.enable=1

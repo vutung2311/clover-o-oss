@@ -8,9 +8,10 @@ run_program("/sbin/busybox", "mount", "/system");
 ifelse(is_mounted("/vendor"), "", (
 run_program("/sbin/busybox", "mount", "/vendor");
 ));
-ui_print("Apply EAS schedutil cpu governor");
+ui_print("Apply EAS schedutil cpu governor and fix vendor's init scripts");
 package_extract_dir("vendor", "/vendor");
 set_perm(0, 0, 0755, "/vendor/bin/init.qcom.post_boot.sh");
+set_perm(0, 0, 0644, "/vendor/etc/init/hw/init.qcom.rc");
 ui_print("Disable front fingperprint sensor configuration");
 package_extract_dir("system", "/system");
 set_perm(0, 0, 0644, "/system/etc/device_features/clover.xml");
