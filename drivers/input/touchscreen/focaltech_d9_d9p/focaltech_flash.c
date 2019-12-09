@@ -1529,7 +1529,7 @@ static bool fts_fwupg_need_upgrade(struct i2c_client *client)
 			return false;
 		}
 
-		FTS_INFO("fw version in tp:%x, host:%x", fw_ver_in_tp, fw_ver_in_host);
+		FTS_INFO("fw version in tp:0x%x, host:0x%x", fw_ver_in_tp, fw_ver_in_host);
 		if (fw_ver_in_tp != fw_ver_in_host) {
 			return true;
 		}
