@@ -362,6 +362,7 @@
 
 		mdss_dsi0: qcom,mdss_dsi_ctrl0@c994000 {
 			compatible = "qcom,mdss-dsi-ctrl";
+			qcom,display-id = "primary";
 			label = "MDSS DSI CTRL->0";
 			cell-index = <0>;
 			reg =	<0xc994000 0x400>,
@@ -413,6 +414,7 @@
 
 		mdss_dsi1: qcom,mdss_dsi_ctrl1@c996000 {
 			compatible = "qcom,mdss-dsi-ctrl";
+			qcom,display-id = "secondary";
 			label = "MDSS DSI CTRL->1";
 			cell-index = <1>;
 			reg =	<0xc996000 0x400>,
