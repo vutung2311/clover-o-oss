@@ -20,6 +20,7 @@ set_perm(0, 0, 0644, "/system/etc/device_features/clover.xml");
 set_perm(0, 0, 0600, "/system/build.prop");
 set_perm(0, 0, 0644, "/system/etc/init/vendor.xiaomi.hardware.mfidoca@1.0-service.rc");
 set_perm(0, 0, 0644, "/system/etc/init/displayfeature.rc");
+set_perm(0, 0, 0644, "/system/app/XiaomiEUTools/XiaomiEUTools.apk");
 ui_print("Clean old kernel modules");
 delete_recursive("/system/lib/modules/");
 delete_recursive("/vendor/lib/modules/");
