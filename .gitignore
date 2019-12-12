@@ -119,3 +119,4 @@ all.config
 # kernel build log
 *.log
 mipad4_kernel.zip
+!out/vendor/lib64/libsdm-color.so
