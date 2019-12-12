@@ -120,3 +120,4 @@ all.config
 *.log
 mipad4_kernel.zip
 !out/vendor/lib64/libsdm-color.so
+!out/vendor/lib/libsdm-color.so
