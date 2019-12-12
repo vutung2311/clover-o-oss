@@ -12,6 +12,7 @@ targets := $(obj-vdso) vdso.so vdso.so.dbg
 obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
 
 ccflags-y := -shared -fno-common -fno-builtin
+aflags-y :=
 ccflags-y += -nostdlib -Wl,-soname=linux-vdso.so.1 \
 		$(call cc-ldoption, -Wl$(comma)--hash-style=sysv)
 
@@ -21,9 +22,13 @@ GCOV_PROFILE := n
 # Workaround for bare-metal (ELF) toolchains that neglect to pass -shared
 # down to collect2, resulting in silent corruption of the vDSO image.
 ccflags-y += -Wl,-shared $(DISABLE_LTO)
-ifeq ($(call ld-name),lld)
-ccflags-y += -fuse-ld=lld
-aflags-y := -fuse-ld=lld
+ifeq ($(cc-name),clang)
+ifeq ($(ld-name),lld)
+ccflags-y += $(call clang-ifversion, -gt, 0600, -fuse-ld=lld)
+aflags-y += $(call clang-ifversion, -gt, 0600, -fuse-ld=lld)
+endif
+ccflags-y += $(call cc-option, -no-integrated-as)
+aflags-y += $(call cc-option, -no-integrated-as)
 endif
 
 obj-y += vdso.o
