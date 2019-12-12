@@ -1287,16 +1287,15 @@ static int fb_notifier_callback(struct notifier_block *self,
 
 	FTS_DEBUG("Enter %s", __func__);
 
-	if (evdata && evdata->data && event == FB_EARLY_EVENT_BLANK &&
-		fts_data && fts_data->client) {
+	if (evdata && evdata->data && fts_data && fts_data->client) {
 		blank = evdata->data;
-		if (*blank == FB_BLANK_UNBLANK)
+		if (event == FB_EVENT_BLANK && *blank == FB_BLANK_UNBLANK)
 #if FTS_RESUME_EN
 			fts_resume_queue_work();
 #else
 			fts_ts_resume(&fts_data->client->dev);
 #endif
-		else if (*blank == FB_BLANK_POWERDOWN)
+		else if (event == FB_EARLY_EVENT_BLANK && *blank != FB_BLANK_UNBLANK)
 			fts_ts_suspend(&fts_data->client->dev);
 	}
 

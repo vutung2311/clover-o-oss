@@ -1249,14 +1249,11 @@ static int fb_notifier_callback(struct notifier_block *self,
 	struct fts_ts_data *fts_data =
 		container_of(self, struct fts_ts_data, fb_notif);
 
-	if (evdata && evdata->data && event == FB_EVENT_BLANK &&
-		fts_data && fts_data->client) {
+	if (evdata && evdata->data && fts_data && fts_data->client) {
 		blank = evdata->data;
-		if (*blank == FB_BLANK_UNBLANK) {
+		if (event == FB_EVENT_BLANK && *blank == FB_BLANK_UNBLANK)
 			queue_work(fts_data->ts_workqueue, &fts_data->resume_work);
-
-		}
-		else if (*blank == FB_BLANK_POWERDOWN)
+		else if (event == FB_EARLY_EVENT_BLANK && *blank != FB_BLANK_UNBLANK)
 			fts_ts_suspend(&fts_data->client->dev);
 	}
 

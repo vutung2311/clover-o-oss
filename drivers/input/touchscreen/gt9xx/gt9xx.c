@@ -2651,16 +2651,15 @@ static int gtp_fb_notifier_callback(struct notifier_block *noti,
 			struct goodix_ts_data, notifier);
 	int *blank;
 
-	if (ev_data && ev_data->data && event == FB_EARLY_EVENT_BLANK && ts) {
+	if (ev_data && ev_data->data && ts) {
 		blank = ev_data->data;
-		if (*blank == FB_BLANK_UNBLANK ||
-		    *blank == FB_BLANK_NORMAL) {
+		if (event == FB_EVENT_BLANK && *blank == FB_BLANK_UNBLANK) {
 			dev_dbg(&ts->client->dev, "ts_resume");
 			if (ts->pdata->resume_in_workqueue)
 				schedule_work(&ts->fb_notify_work);
 			else
 				gtp_resume(ts);
-		} else if (*blank == FB_BLANK_POWERDOWN) {
+		} else if (event == FB_EARLY_EVENT_BLANK && *blank != FB_BLANK_UNBLANK) {
 			dev_dbg(&ts->client->dev, "ts_suspend");
 			if (ts->pdata->resume_in_workqueue)
 				flush_work(&ts->fb_notify_work);
