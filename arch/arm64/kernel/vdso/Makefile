@@ -21,14 +21,17 @@ GCOV_PROFILE := n
 
 # Workaround for bare-metal (ELF) toolchains that neglect to pass -shared
 # down to collect2, resulting in silent corruption of the vDSO image.
-ccflags-y += -Wl,-shared $(DISABLE_LTO)
+ccflags-y += -Wl,-shared
+ifdef CONFIG_CLANG_LTO
+ccflags-y += $(DISABLE_LTO)
+endif
 ifeq ($(cc-name),clang)
 ifeq ($(ld-name),lld)
-ccflags-y += $(call clang-ifversion, -gt, 0600, -fuse-ld=lld)
-aflags-y += $(call clang-ifversion, -gt, 0600, -fuse-ld=lld)
+ccflags-y += $(call clang-ifversion, -gt, 0600, -fuse-ld=$(LD))
+aflags-y += $(call clang-ifversion, -gt, 0600, -fuse-ld=$(LD))
 endif
-ccflags-y += $(call cc-option, -no-integrated-as)
-aflags-y += $(call cc-option, -no-integrated-as)
+ccflags-y += $(call cc-option, -fno-integrated-as)
+aflags-y += $(call cc-option, -fno-integrated-as)
 endif
 
 obj-y += vdso.o
