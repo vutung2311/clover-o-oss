@@ -91,7 +91,7 @@ FUNC_BUILD_RAMDISK()
 
 FUNC_BUILD_ZIP()
 {
-    cd ${RDIR}/out/
+    rm -f ${RDIR}/${OUTPUT_ZIP}.zip
     cp ${RDIR}/aik/image-new.img ${RDIR}/out/boot.img
     cd ${RDIR}/out/ && zip ../${OUTPUT_ZIP}.zip -r *
 }
