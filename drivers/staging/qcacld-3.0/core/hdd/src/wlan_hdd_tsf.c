@@ -1220,6 +1220,7 @@ enum hdd_tsf_op_result hdd_netbuf_timestamp(qdf_nbuf_t netbuf,
 {
 	struct hdd_adapter *adapter;
 	struct net_device *net_dev = netbuf->dev;
+	struct skb_shared_hwtstamps hwtstamps;
 
 	if (!net_dev)
 		return HDD_TSF_OP_FAIL;
@@ -1232,7 +1233,9 @@ enum hdd_tsf_op_result hdd_netbuf_timestamp(qdf_nbuf_t netbuf,
 		int32_t ret = hdd_get_soctime_from_tsf64time(adapter,
 				tsf64_time, &soc_time);
 		if (!ret) {
-			netbuf->tstamp = soc_time;
+			hwtstamps.hwtstamp = soc_time;
+			*skb_hwtstamps(netbuf) = hwtstamps;
+			netbuf->tstamp = ktime_set(0, 0);
 			return HDD_TSF_OP_SUCC;
 		}
 	}
@@ -1284,7 +1287,7 @@ int hdd_tx_timestamp(qdf_nbuf_t netbuf, uint64_t target_time)
 	if (!sk)
 		return -EINVAL;
 
-	if ((skb_shinfo(netbuf)->tx_flags & SKBTX_SW_TSTAMP) &&
+	if ((skb_shinfo(netbuf)->tx_flags & SKBTX_HW_TSTAMP) &&
 	    !(skb_shinfo(netbuf)->tx_flags & SKBTX_IN_PROGRESS)) {
 		struct sock_exterr_skb *serr;
 		qdf_nbuf_t new_netbuf;
@@ -1321,7 +1324,7 @@ int hdd_rx_timestamp(qdf_nbuf_t netbuf, uint64_t target_time)
 		return 0;
 
 	/* reset tstamp when failed */
-	netbuf->tstamp = ns_to_ktime(0);
+	netbuf->tstamp = ktime_set(0, 0);
 	return -EINVAL;
 }
 
@@ -1620,7 +1623,7 @@ static int __wlan_hdd_cfg80211_handle_tsf_cmd(struct wiphy *wiphy,
 	struct nlattr *tb_vendor[QCA_WLAN_VENDOR_ATTR_TSF_MAX + 1];
 	int status, ret;
 	struct sk_buff *reply_skb;
-	uint32_t tsf_op_resp[3] = { 0, }, tsf_cmd;
+	uint32_t tsf_op_resp[3], tsf_cmd;
 
 	hdd_enter_dev(wdev->netdev);
 
