@@ -83,7 +83,8 @@ FUNC_BUILD_RAMDISK()
 {
     find ${RDIR}/out -name "*.ko" -exec rm {} \;
     cp ${RDIR}/arch/${ARCH}/boot/Image.gz-dtb ${RDIR}/aik/split_img/boot.img-zImage
-    find ${RDIR} -name "*.ko" -not -path "*/aik/ramdisk/*" -exec cp -f {} ${RDIR}/out/system/lib/modules/ \;
+    find ${RDIR} -name "*.ko" -not -path "*/out/*" -not -name "wlan.ko" -exec cp -f {} ${RDIR}/out/system/lib/modules/ \;
+    find ${RDIR} -name "wlan.ko" -not -path "*/out/*" -exec cp -f {} ${RDIR}/out/vendor/lib/modules/qca_cld3/qca_cld3_wlan.ko \;
     cd ${RDIR}/aik
     ./fixperm.sh
     ./repackimg.sh
