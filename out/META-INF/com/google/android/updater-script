@@ -39,6 +39,9 @@ set_perm(0, 0, 0644, "/system/etc/init/displayfeature.rc");
 run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/etc/init/displayfeature.rc");
 set_perm(0, 0, 0644, "/system/app/XiaomiEUTools/XiaomiEUTools.apk");
 run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/app/XiaomiEUTools/XiaomiEUTools.apk");
+delete_recursive("/system/priv-app/Browser");
+set_perm(0, 0, 0644, "/system/app/Firefox/Firefox.apk");
+run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/app/Firefox/Firefox.apk");
 
 run_program("/sbin/busybox", "umount", "/system");
 run_program("/sbin/busybox", "umount", "/vendor");
