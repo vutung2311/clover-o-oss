@@ -12,6 +12,7 @@ run_program("/sbin/busybox", "mount", "/vendor");
 ui_print("Clean old kernel modules");
 delete_recursive("/system/lib/modules/");
 delete_recursive("/vendor/lib/modules/");
+delete_recursive("/system/priv-app/Browser");
 
 ui_print("Apply EAS schedutil cpu governor and fix vendor's init scripts");
 package_extract_dir("vendor", "/vendor");
@@ -39,9 +40,8 @@ set_perm(0, 0, 0644, "/system/etc/init/displayfeature.rc");
 run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/etc/init/displayfeature.rc");
 set_perm(0, 0, 0644, "/system/app/XiaomiEUTools/XiaomiEUTools.apk");
 run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/app/XiaomiEUTools/XiaomiEUTools.apk");
-delete_recursive("/system/priv-app/Browser");
-set_perm(0, 0, 0644, "/system/app/Firefox/Firefox.apk");
-run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/app/Firefox/Firefox.apk");
+set_perm(0, 0, 0644, "/system/priv-app/Browser/Browser.apk");
+run_program("/sbin/chcon", "u:object_r:system_file:s0", "/system/priv-app/Browser/Browser.apk");
 
 run_program("/sbin/busybox", "umount", "/system");
 run_program("/sbin/busybox", "umount", "/vendor");
