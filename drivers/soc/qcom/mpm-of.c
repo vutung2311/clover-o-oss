@@ -109,8 +109,7 @@ struct mpm_of {
 static struct clk *xo_clk;
 static bool xo_enabled;
 static bool msm_mpm_in_suspend;
-static struct workqueue_struct *msm_mpm_wq;
-static struct work_struct msm_mpm_work;
+static struct delayed_work msm_mpm_work;
 static struct completion wake_wq;
 
 enum mpm_reg_offsets {
@@ -744,21 +743,8 @@ static int msm_mpm_dev_probe(struct platform_device *pdev)
 
 	init_completion(&wake_wq);
 
-	INIT_WORK(&msm_mpm_work, msm_mpm_work_fn);
-	msm_mpm_wq = create_singlethread_workqueue("mpm");
-
-	if (msm_mpm_wq)
-		queue_work(msm_mpm_wq, &msm_mpm_work);
-	else  {
-		pr_warn("%s(): Failed to create wq. So voting against XO off",
-				__func__);
-		/* Throw a BUG. Otherwise, its possible that system allows
-		 * XO shutdown when there are non-monitored interrupts are
-		 * pending and cause errors at a later point in time.
-		 */
-		BUG_ON(clk_prepare_enable(xo_clk));
-		xo_enabled = true;
-	}
+	INIT_DELAYED_WORK(&msm_mpm_work, msm_mpm_work_fn);
+	mod_delayed_work(system_wq, &msm_mpm_work, 0);
 
 	msm_mpm_initialized |= MSM_MPM_DEVICE_PROBED;
 	return 0;
