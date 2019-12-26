@@ -234,7 +234,7 @@
  * if FTS_GET_VENDOR_ID_NUM >= 3, fw corrsponding with FTS_VENDOR_ID3
  * define your own fw_file, the sample one is invalid
  */
-#define FTS_UPGRADE_FW3_FILE                     "include/firmware/fw_sample.i"
+#define FTS_UPGRADE_FW3_FILE                     "include/firmware/LQ_F6_FT5446DQS-M03_BOE_Black_V16_D01_20190327_app.i"
 
 /*
  * Add by HQ-102007757 for sending ctp hw info
