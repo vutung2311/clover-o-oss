@@ -142,7 +142,7 @@ struct fts_ts_data {
 	struct regulator *vdd;
 	struct regulator *vcc_i2c;
 	spinlock_t irq_lock;
-	struct mutex report_mutex;
+	struct rt_mutex report_mutex;
 	int irq;
 	bool suspended;
 	bool fw_loading;

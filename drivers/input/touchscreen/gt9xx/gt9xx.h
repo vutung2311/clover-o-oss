@@ -111,13 +111,13 @@ struct goodix_ts_platform_data {
 
 struct goodix_ts_esd {
 	struct delayed_work delayed_work;
-	struct mutex mutex;
+	struct rt_mutex mutex;
 	bool esd_on;
 };
 #if GTP_CHARGER_SWITCH
 struct goodix_ts_charger{
     struct delayed_work delayed_work;
-	struct mutex mutex;
+	struct rt_mutex mutex;
 	bool charger_on;
 };
 #endif
@@ -165,7 +165,7 @@ struct goodix_ts_data {
 	/* use pinctrl control int-pin output low or high */
 	struct goodix_pinctrl pinctrl;
 	struct hrtimer timer;
-	struct mutex lock;
+	struct rt_mutex lock;
 	struct notifier_block ps_notif;
 	struct regulator *vdd_ana;
 	struct regulator *vcc_i2c;

@@ -620,7 +620,7 @@ static void fts_release_all_finger(void)
 #endif
 
 	FTS_FUNC_ENTER();
-	mutex_lock(&fts_data->report_mutex);
+	rt_mutex_lock(&fts_data->report_mutex);
 #if FTS_MT_PROTOCOL_B_EN
 	for (finger_count = 0; finger_count < fts_data->pdata->max_touch_number; finger_count++) {
 		input_mt_slot(input_dev, finger_count);
@@ -632,7 +632,7 @@ static void fts_release_all_finger(void)
 	input_report_key(input_dev, BTN_TOUCH, 0);
 	input_sync(input_dev);
 
-	mutex_unlock(&fts_data->report_mutex);
+	rt_mutex_unlock(&fts_data->report_mutex);
 	FTS_FUNC_EXIT();
 }
 
@@ -950,9 +950,9 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
 
 	ret = fts_read_touchdata(ts_data);
 	if (ret == 0) {
-		mutex_lock(&ts_data->report_mutex);
+		rt_mutex_lock(&ts_data->report_mutex);
 		fts_report_event(ts_data);
-		mutex_unlock(&ts_data->report_mutex);
+		rt_mutex_unlock(&ts_data->report_mutex);
 	}
 
 #if FTS_ESDCHECK_EN
@@ -1446,7 +1446,7 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 
 	spin_lock_init(&ts_data->irq_lock);
-	mutex_init(&ts_data->report_mutex);
+	rt_mutex_init(&ts_data->report_mutex);
 
 	ret = fts_input_init(ts_data);
 	if (ret) {
@@ -1692,6 +1692,8 @@ static int fts_ts_remove(struct i2c_client *client)
 
 	kfree_safe(ts_data->point_buf);
 	kfree_safe(ts_data->events);
+
+	rt_mutex_destroy(&ts_data->report_mutex);
 
 	devm_kfree(&client->dev, ts_data);
 

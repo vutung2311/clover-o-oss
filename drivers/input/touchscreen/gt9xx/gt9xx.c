@@ -700,12 +700,12 @@ static void gtp_work_func(struct goodix_ts_data *ts)
 		pre_key = key_value;
 	}
 
-	mutex_lock(&ts->lock);
+	rt_mutex_lock(&ts->lock);
 	if (!ts->pdata->type_a_report)
 		gtp_mt_slot_report(ts, point_state & 0x0f, points);
 	else
 		gtp_type_a_report(ts, point_state & 0x0f, points);
-	mutex_unlock(&ts->lock);
+	rt_mutex_unlock(&ts->lock);
 }
 
 /*******************************************************
@@ -2357,7 +2357,7 @@ static int gtp_probe(struct i2c_client *client, const struct i2c_device_id *id)
 		goto exit_free_io_port;
 	}
 
-	mutex_init(&ts->lock);
+	rt_mutex_init(&ts->lock);
 
 	ret = gtp_request_irq(ts);
 	if (ret < 0) {
@@ -2478,7 +2478,7 @@ static int gtp_drv_remove(struct i2c_client *client)
 	dev_info(&client->dev, "goodix ts driver removed");
 	i2c_set_clientdata(client, NULL);
 	input_unregister_device(ts->input_dev);
-	mutex_destroy(&ts->lock);
+	rt_mutex_destroy(&ts->lock);
 
 	devm_kfree(&client->dev, ts->pdata);
 	devm_kfree(&client->dev, ts);
@@ -2490,7 +2490,7 @@ static void gtp_clear_touch_event(struct goodix_ts_data *ts){
 	int i;
 
 	dev_info(&ts->client->dev, "%s:ENTER ---- %d\n",__func__,__LINE__);
-	mutex_lock(&ts->lock);
+	rt_mutex_lock(&ts->lock);
  	for (i = 0; i < ts->pdata->max_touch_id; i++) {
  		input_mt_slot(ts->input_dev, i);
 		input_mt_report_slot_state(ts->input_dev, MT_TOOL_FINGER, true);
@@ -2501,7 +2501,7 @@ static void gtp_clear_touch_event(struct goodix_ts_data *ts){
  	input_report_key(ts->input_dev, BTN_TOUCH, 0);
  	input_sync(ts->input_dev);
 	ts->pre_touch = 0;
-	mutex_unlock(&ts->lock);
+	rt_mutex_unlock(&ts->lock);
 	dev_info(&ts->client->dev, "%s:Exit ---- %d\n",__func__,__LINE__);
  }
 
@@ -2869,7 +2869,7 @@ static int gtp_esd_init(struct goodix_ts_data *ts)
 	struct goodix_ts_esd *ts_esd = &ts->ts_esd;
 
 	INIT_DELAYED_WORK(&ts_esd->delayed_work, gtp_esd_check_func);
-	mutex_init(&ts_esd->mutex);
+	rt_mutex_init(&ts_esd->mutex);
 	ts_esd->esd_on = false;
 
 	return 0;
@@ -2881,13 +2881,13 @@ void gtp_esd_on(struct goodix_ts_data *ts)
 
 	if (!ts->pdata->esd_protect)
 		return;
-	mutex_lock(&ts_esd->mutex);
+	rt_mutex_lock(&ts_esd->mutex);
 	if (ts_esd->esd_on == false) {
 		ts_esd->esd_on = true;
 		schedule_delayed_work(&ts_esd->delayed_work, 2 * HZ);
 		dev_info(&ts->client->dev, "ESD on");
 	}
-	mutex_unlock(&ts_esd->mutex);
+	rt_mutex_unlock(&ts_esd->mutex);
 }
 
 void gtp_esd_off(struct goodix_ts_data *ts)
@@ -2896,13 +2896,13 @@ void gtp_esd_off(struct goodix_ts_data *ts)
 
 	if (!ts->pdata->esd_protect)
 		return;
-	mutex_lock(&ts_esd->mutex);
+	rt_mutex_lock(&ts_esd->mutex);
 	if (ts_esd->esd_on == true) {
 		ts_esd->esd_on = false;
 		cancel_delayed_work_sync(&ts_esd->delayed_work);
 		dev_info(&ts->client->dev, "ESD off");
 	}
-	mutex_unlock(&ts_esd->mutex);
+	rt_mutex_unlock(&ts_esd->mutex);
 }
 
 #if GTP_CHARGER_SWITCH
@@ -2965,7 +2965,7 @@ static int gtp_charger_init(struct goodix_ts_data *ts)
 	struct goodix_ts_charger *ts_charger = &ts->ts_charger;
 
 	INIT_DELAYED_WORK(&ts_charger->delayed_work, gtp_charger_check_func);
-	mutex_init(&ts_charger->mutex);
+	rt_mutex_init(&ts_charger->mutex);
 	ts_charger->charger_on = false;
 
 	return 0;
@@ -2977,13 +2977,13 @@ void gtp_charger_on(struct goodix_ts_data *ts)
 
 	if (!ts->pdata->charger_cmd)
 		return;
-	mutex_lock(&ts_charger->mutex);
+	rt_mutex_lock(&ts_charger->mutex);
 	if (ts_charger->charger_on == false) {
 		ts_charger->charger_on = true;
 		schedule_delayed_work(&ts_charger->delayed_work, 1 * HZ);
 		dev_info(&ts->client->dev, "Charger on");
 	}
-	mutex_unlock(&ts_charger->mutex);
+	rt_mutex_unlock(&ts_charger->mutex);
 }
 
 void gtp_charger_off(struct goodix_ts_data *ts)
@@ -2992,13 +2992,13 @@ void gtp_charger_off(struct goodix_ts_data *ts)
 
 	if (!ts->pdata->charger_cmd)
 		return;
-	mutex_lock(&ts_charger->mutex);
+	rt_mutex_lock(&ts_charger->mutex);
 	if (ts_charger->charger_on == true) {
 		ts_charger->charger_on = false;
 		cancel_delayed_work_sync(&ts_charger->delayed_work);
 		dev_info(&ts->client->dev, "Charger  off");
 	}
-	mutex_unlock(&ts_charger->mutex);
+	rt_mutex_unlock(&ts_charger->mutex);
 }
 #endif
 
