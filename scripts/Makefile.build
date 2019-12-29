@@ -460,7 +460,7 @@ ifdef CONFIG_CC_LTO
 multi-deps-cmds = $(call cc_lto_objects,$(link_multi_deps))
 
 quiet_cmd_update_multi_deps = GEN     $@
-cmd_update_multi_deps = (cat /dev/null; $(multi-deps-cmds)) > $@.objects && \
+cmd_update_multi_deps = echo $(shell $(multi-deps-cmds)) > $@.objects && \
 			cat /dev/null > $@
 
 $(multi-used-y): FORCE
