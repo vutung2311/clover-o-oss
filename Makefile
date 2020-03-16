@@ -793,8 +793,9 @@ endif
 DISABLE_LTO     := -fno-lto
 export DISABLE_LTO LD_FINAL_VMLINUX LDFLAGS_FINAL_VMLINUX
 ifdef CONFIG_MODVERSIONS
-LLVM_DIS	:= llvm-dis
-export LLVM_DIS
+LLVM_BIN_PATH := $(patsubst %/,%,$(dir $(shell which $(CC))))
+LLVM_NM	:= $(LLVM_BIN_PATH)/llvm-nm
+export LLVM_NM
 endif
 endif
 

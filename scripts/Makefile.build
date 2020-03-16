@@ -221,7 +221,7 @@ cmd_modversions =								\
 			    > $(@D)/$(@F).symversions;				\
 		fi;								\
 	else									\
-		if $(LLVM_DIS) -o=- $(@D)/.tmp_$(@F) | grep -q __ksymtab; then	\
+		if $(LLVM_NM) $(@D)/.tmp_$(@F) 2>/dev/null | grep -q __ksymtab; then	\
 			$(call cmd_gensymtypes,$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
 			    > $(@D)/$(@F).symversions;				\
 		fi;								\
