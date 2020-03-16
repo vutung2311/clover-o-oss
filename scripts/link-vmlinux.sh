@@ -247,7 +247,11 @@ if [ -n "${CONFIG_CC_LTO}" ]; then
 fi
 
 #link vmlinux.o
+if [ -n "${CONFIG_CC_LTO}" ]; then
+info LTO vmlinux.o
+else
 info LD vmlinux.o
+fi
 modpost_link vmlinux.o
 
 # modpost vmlinux.o to check for section mismatches
