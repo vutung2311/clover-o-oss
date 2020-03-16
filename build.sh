@@ -5,13 +5,13 @@ export TARGET_BUILD_VARIANT=user
 export KBUILD_BUILD_USER=BuildUser
 export KBUILD_BUILD_HOST=BuildHost
 
-ARM64_GCC_BIN_PATH=$HOME/Toolchain/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin
-ARM32_GCC_BIN_PATH=$HOME/Toolchain/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin
-CLANG_BIN_PATH=$HOME/Toolchain/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/bin
-LD_BIN_PATH=$HOME/Toolchain/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/bin
+ARM64_GCC_BIN_PATH=$HOME/Toolchain/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin
+ARM32_GCC_BIN_PATH=$HOME/Toolchain/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin
+CLANG_BIN_PATH=/usr/lib/llvm-10/bin
+LD_BIN_PATH=/usr/lib/llvm-10/bin
 
-BUILD_CROSS_COMPILE_ARM64=$ARM64_GCC_BIN_PATH/aarch64-linux-gnu-
-BUILD_CROSS_COMPILE_ARM32=$ARM32_GCC_BIN_PATH/arm-linux-gnueabihf-
+BUILD_CROSS_COMPILE_ARM64=$ARM64_GCC_BIN_PATH/aarch64-none-linux-gnu-
+BUILD_CROSS_COMPILE_ARM32=$ARM32_GCC_BIN_PATH/arm-none-linux-gnueabihf-
 BUILD_CC=$CLANG_BIN_PATH/clang
 # BUILD_CC="${BUILD_CROSS_COMPILE_ARM64}gcc"
 BUILD_LD=$LD_BIN_PATH/ld.lld
