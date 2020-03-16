@@ -35,7 +35,7 @@ KCOV_INSTRUMENT := n
 # Workaround for bare-metal (ELF) toolchains that neglect to pass -shared
 # down to collect2, resulting in silent corruption of the vDSO image.
 ccflags-y += -Wl,-shared
-ifdef CONFIG_CLANG_LTO
+ifdef CONFIG_CC_LTO
 ccflags-y += $(DISABLE_LTO)
 endif
 ifeq ($(cc-name),clang)

@@ -782,7 +782,11 @@ KBUILD_CFLAGS += $(call cc-option, -fno-inline-functions-called-once)
 endif
 
 ifdef CONFIG_CC_LTO
-KBUILD_CFLAGS   += -fvisibility=hidden
+# Limit inlining across translation units to reduce binary size
+LD_FLAGS_LTO_CLANG := -mllvm -import-instr-limit=5
+LDFLAGS += $(LD_FLAGS_LTO_CLANG)
+
+KBUILD_CFLAGS   += -flto=thin -fvisibility=hidden 
 ifeq ($(ld-name),gold)
 LDFLAGS_GOLD	+= -plugin LLVMgold.so
 endif
@@ -792,10 +796,6 @@ ifdef CONFIG_MODVERSIONS
 LLVM_DIS	:= llvm-dis
 export LLVM_DIS
 endif
-endif
-
-ifdef CONFIG_CLANG_LTO
-KBUILD_CFLAGS   += -flto=thin
 endif
 
 # arch Makefile may override CC so keep this after arch Makefile is included
